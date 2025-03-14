@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Tarefas</title>
+    <!-- Importando Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.4/css/bulma.min.css"
+    />
+    <!-- Importando Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- CSS customizado -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Cabeçalho centralizado -->
+    <section class="hero is-primary">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title">
+            <i class="fas fa-tasks mr-2"></i> Gerenciador de Tarefas
+          </h1>
+          <h2 class="subtitle">Organize suas tarefas de forma eficiente</h2>
+          <!-- Campo de busca centralizado -->
+          <div
+            class="field has-addons is-centered"
+            style="max-width: 500px; margin: 0 auto"
+          >
+            <div class="control is-expanded">
+              <input
+                class="input"
+                type="text"
+                id="searchInput"
+                placeholder="Buscar tarefas..."
+              />
+            </div>
+            <div class="control">
+              <button class="button is-info" id="searchBtn">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <!-- Indicadores -->
+          <div class="columns is-mobile mt-3 is-centered">
+            <div class="column">
+              <p class="heading">Total</p>
+              <p class="title" id="totalTasks">0</p>
+            </div>
+            <div class="column">
+              <p class="heading">Pendentes</p>
+              <p class="title" id="pendingTasks">0</p>
+            </div>
+            <div class="column">
+              <p class="heading">Concluídas</p>
+              <p class="title" id="completedTasks">0</p>
+            </div>
+            <div class="column">
+              <p class="heading">Atrasadas</p>
+              <p class="title has-text-danger" id="overdueTasks">0</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Formulário de adição de tarefas -->
+    <section class="section task-container">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-8">
+            <div class="box task-form">
+              <h3 class="title is-4 has-text-centered mb-4">Nova Tarefa</h3>
+              <div class="field">
+                <label class="label">Descrição da Tarefa</label>
+                <div class="control has-icons-left">
+                  <input
+                    class="input"
+                    type="text"
+                    id="taskInput"
+                    placeholder="Digite uma nova tarefa"
+                  />
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-tasks"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Data de Conclusão</label>
+                <div class="control has-icons-left">
+                  <input class="input" type="date" id="dateInput" />
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-calendar-alt"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="label">Prioridade</label>
+                <div class="control has-icons-left">
+                  <div class="select is-fullwidth">
+                    <select id="priorityInput">
+                      <option value="Baixa">Baixa Prioridade</option>
+                      <option value="Média">Média Prioridade</option>
+                      <option value="Alta">Alta Prioridade</option>
+                    </select>
+                  </div>
+                  <div class="icon is-small is-left">
+                    <i class="fas fa-flag"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field mt-4">
+                <div class="control">
+                  <button class="button is-info is-fullwidth" id="addTaskBtn">
+                    <span class="icon">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                    <span>Adicionar Tarefa</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botões de Visualização e filtros -->
+            <div class="box has-background-light">
+              <div class="level is-mobile">
+                <div class="level-left">
+                  <div class="level-item">
+                    <div class="buttons has-addons">
+                      <button
+                        class="button is-success is-selected"
+                        id="listViewBtn"
+                      >
+                        <span class="icon">
+                          <i class="fas fa-list"></i>
+                        </span>
+                        <span>Lista</span>
+                      </button>
+                      <button class="button" id="tableViewBtn">
+                        <span class="icon">
+                          <i class="fas fa-table"></i>
+                        </span>
+                        <span>Tabela</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="level-right">
+                  <div class="level-item">
+                    <div class="buttons">
+                      <div class="dropdown is-hoverable" id="filterDropdown">
+                        <div class="dropdown-trigger">
+                          <button
+                            class="button is-info"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-menu"
+                          >
+                            <span class="icon is-small">
+                              <i class="fas fa-filter"></i>
+                            </span>
+                            <span>Filtrar</span>
+                            <span class="icon is-small">
+                              <i
+                                class="fas fa-angle-down"
+                                aria-hidden="true"
+                              ></i>
+                            </span>
+                          </button>
+                        </div>
+                        <div
+                          class="dropdown-menu"
+                          id="dropdown-menu"
+                          role="menu"
+                        >
+                          <div class="dropdown-content">
+                            <a
+                              class="dropdown-item filter-item"
+                              data-filter="all"
+                            >
+                              <span class="icon"
+                                ><i class="fas fa-tasks"></i
+                              ></span>
+                              <span>Todas</span>
+                            </a>
+                            <a
+                              class="dropdown-item filter-item"
+                              data-filter="pending"
+                            >
+                              <span class="icon"
+                                ><i class="fas fa-clock"></i
+                              ></span>
+                              <span>Pendentes</span>
+                            </a>
+                            <a
+                              class="dropdown-item filter-item"
+                              data-filter="completed"
+                            >
+                              <span class="icon"
+                                ><i class="fas fa-check-circle"></i
+                              ></span>
+                              <span>Concluídas</span>
+                            </a>
+                            <a
+                              class="dropdown-item filter-item"
+                              data-filter="high"
+                            >
+                              <span class="icon"
+                                ><i class="fas fa-exclamation-circle"></i
+                              ></span>
+                              <span>Alta Prioridade</span>
+                            </a>
+                            <a
+                              class="dropdown-item filter-item"
+                              data-filter="today"
+                            >
+                              <span class="icon"
+                                ><i class="fas fa-calendar-day"></i
+                              ></span>
+                              <span>Para Hoje</span>
+                            </a>
+                            <a
+                              class="dropdown-item filter-item"
+                              data-filter="overdue"
+                            >
+                              <span class="icon"
+                                ><i class="fas fa-exclamation-triangle"></i
+                              ></span>
+                              <span>Atrasadas</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button class="button is-primary" id="exportBtn">
+                        <span class="icon">
+                          <i class="fas fa-download"></i>
+                        </span>
+                        <span>Exportar</span>
+                      </button>
+
+                      <button class="button is-danger" id="clearAllBtn">
+                        <span class="icon">
+                          <i class="fas fa-trash-alt"></i>
+                        </span>
+                        <span>Limpar</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Indicador de filtro ativo -->
+              <div id="activeFilterIndicator" class="is-hidden mt-3">
+                <div class="notification is-info is-light py-2">
+                  <button class="delete" id="clearFilterBtn"></button>
+                  <span id="filterDescription">Mostrando todas as tarefas</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Visualização em Lista -->
+            <div id="listView" class="content">
+              <ul id="taskList" class="list">
+                <!-- Tarefas serão adicionadas dinamicamente -->
+              </ul>
+            </div>
+
+            <!-- Visualização em Tabela -->
+            <div id="tableView" class="content is-hidden">
+              <table class="table is-fullwidth is-striped is-hoverable">
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Tarefa</th>
+                    <th>Prazo</th>
+                    <th>Prioridade</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="taskTableBody">
+                  <!-- Tarefas serão adicionadas dinamicamente -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>Gerenciador de Tarefas</strong> - Desenvolvido com
+          <a href="https://bulma.io">Bulma</a> e JavaScript
+        </p>
+        <p class="is-size-7">
+          <a href="#" id="debugBtn" class="has-text-grey">Suporte</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Modal de suporte -->
+    <div class="modal" id="debugModal">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Opções de Suporte</p>
+          <button
+            class="delete"
+            aria-label="close"
+            id="closeDebugModal"
+          ></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="content">
+            <h3>O aplicativo não está funcionando corretamente?</h3>
+            <p>Experimente estas opções para resolver problemas comuns:</p>
+
+            <div class="buttons">
+              <button class="button is-info" id="checkDOM">
+                <span class="icon"><i class="fas fa-search"></i></span>
+                <span>Verificar Sistema</span>
+              </button>
+              <button class="button is-warning" id="resetApp">
+                <span class="icon"><i class="fas fa-sync"></i></span>
+                <span>Reiniciar Aplicativo</span>
+              </button>
+              <button class="button is-success" id="fixCommonIssues">
+                <span class="icon"><i class="fas fa-wrench"></i></span>
+                <span>Reparar Automaticamente</span>
+              </button>
+            </div>
+            <!-- Verificador de Elementos -->
+            <div class="field mt-4">
+              <label class="label">Verificador de Elementos</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="elementChecker"
+                  type="text"
+                  placeholder="Digite o ID de um elemento"
+                />
+              </div>
+              <p class="help" id="elementCheckerResult"></p>
+            </div>
+            <!-- Output de Debug -->
+            <div class="field">
+              <label class="label">Debug Output</label>
+              <div class="control">
+                <textarea
+                  class="textarea"
+                  id="debugOutput"
+                  placeholder="Resultados do debug"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button" id="closeDebugModalBtn">Fechar</button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="script.js"></script>
+  </body>
+</html>

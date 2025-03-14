@@ -1,0 +1,80 @@
+/* Prioridades */
+.priority-high {
+  background-color: rgba(255, 56, 96, 0.1) !important;
+  border-left: 4px solid #ff3860 !important;
+  padding-left: 12px !important;
+}
+
+.priority-medium {
+  background-color: rgba(255, 221, 87, 0.1) !important;
+  border-left: 4px solid #ffdd57 !important;
+  padding-left: 12px !important;
+}
+
+.priority-low {
+  background-color: rgba(72, 199, 116, 0.1) !important;
+  border-left: 4px solid #48c774 !important;
+  padding-left: 12px !important;
+}
+
+/* Efeitos de hover e transição */
+.task-highlight {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.task-highlight:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Destaque para nova tarefa */
+.new-task {
+  animation: pulse 1s ease-in-out;
+}
+
+/* Filtros */
+.filter-active {
+  background-color: #3273dc !important;
+  color: white !important;
+}
+
+/* Loader */
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.loader {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Status de tarefas */
+.due-soon {
+  border-right: 4px solid #ff3860;
+}
+
+.overdue {
+  color: #ff3860;
+  font-weight: bold;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  .columns {
+    margin: 0;
+  }
+
+  .task-form {
+    padding: 1rem;
+  }
+}
